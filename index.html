@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pausa — saúde mental</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main>
+<section id="hoje" class="on">
+  <h1>Como você está agora?</h1>
+  <p class="mut">Um registro rápido por dia ajuda a perceber padrões.</p>
+  <div class="card">
+    <div class="moods" id="moods" role="group" aria-label="Seu humor"></div>
+    <textarea id="mnote" placeholder="Quer anotar o que influenciou? (opcional)"></textarea>
+    <p style="margin:12px 0 0"><button class="btn" id="msave">Salvar humor</button> <span id="mok" class="mut" role="status"></span></p>
+  </div>
+  <div class="card"><h2>Últimos 7 dias</h2><div class="week" id="week"></div></div>
+</section>
+
+<section id="respirar">
+  <h1>Respirar</h1>
+  <p class="mut">Inspire por 4 segundos, segure por 4 e solte por 6. Repita por alguns minutos.</p>
+  <div class="card">
+    <div class="breath"><div class="orb" id="orb" aria-live="polite">Pronto?</div></div>
+    <p style="text-align:center;margin:0"><button class="btn" id="bgo">Começar</button></p>
+  </div>
+</section>
+
+<section id="sons">
+  <h1>Sons relaxantes</h1>
+  <p class="mut">Misture quantos quiser. Os sons são gerados no próprio aparelho e continuam tocando enquanto você usa outras abas.</p>
+  <div class="card">
+    <div class="snd" id="snd"></div>
+    <p style="margin:16px 0 0"><label for="vol" class="mut">Volume</label><br><input id="vol" type="range" min="0" max="100" value="50" style="width:100%"></p>
+    <p style="margin:12px 0 0"><button class="btn alt" id="sstop">Parar tudo</button></p>
+  </div>
+</section>
+
+<section id="mandala">
+  <h1>Mandala</h1>
+  <p class="mut">Desenhe com o dedo e veja o traço se repetir em simetria. Sem certo ou errado: foque só no movimento e na respiração.</p>
+  <div class="card">
+    <canvas id="cv" width="600" height="600" aria-label="Área de desenho da mandala"></canvas>
+    <div class="tools" id="sw"></div>
+    <div class="tools">
+      <button class="btn alt" data-n="6">6 eixos</button><button class="btn alt" data-n="8">8 eixos</button><button class="btn alt" data-n="12">12 eixos</button>
+      <button class="btn" id="mclr">Limpar</button>
+    </div>
+  </div>
+</section>
+
+<section id="diario">
+  <h1>Diário</h1>
+  <p class="mut" id="prompt"></p>
+  <div class="card">
+    <textarea id="dtext" placeholder="Escreva sem se preocupar com o certo ou errado."></textarea>
+    <p style="margin:12px 0 0"><button class="btn" id="dsave">Salvar entrada</button> <button class="btn alt" id="dnew">Outra pergunta</button></p>
+  </div>
+  <div class="card" id="dlist"></div>
+</section>
+
+<section id="explorar">
+  <h1>Explorar</h1>
+  <p class="mut">Ideias para cuidar da mente: brincar, ouvir e assistir.</p>
+  <details class="card" open><summary>Jogos divertidos em grupo</summary><div id="games"></div><p class="mut" style="margin:10px 0 0">Cuidar da mente também é rir, brincar e se conectar!</p></details>
+  <details class="card"><summary>Playlist: Becoming Myself</summary><p class="mut">Minha melhor versão: uma playlist para refletir, sonhar, se cuidar e evoluir. Toque em Ouvir para buscar a música.</p><div id="music"></div></details>
+  <details class="card"><summary>Filmes sobre saúde mental</summary><div id="movies"></div></details>
+</section>
+
+<section id="ajuda" class="help">
+  <h1>Precisa de ajuda agora?</h1>
+  <p class="mut">Você não precisa passar por isso sozinho. No Brasil, estes serviços são gratuitos:</p>
+  <div class="card"><ul>
+    <li><a href="tel:188">CVV — 188</a>Apoio emocional e prevenção do suicídio, 24 horas. Também por chat em cvv.org.br.</li>
+    <li><a href="tel:192">SAMU — 192</a>Emergências médicas e psiquiátricas.</li>
+    <li><a href="tel:136">Disque Saúde — 136</a>Orientação sobre o atendimento no SUS, incluindo os CAPS (Centros de Atenção Psicossocial).</li>
+  </ul></div>
+  <h2 style="margin-top:28px">Livros de autoajuda</h2>
+  <p class="mut">Sugestões de leitura. Os links abrem uma busca pelo título.</p>
+  <div class="card" id="books"></div>
+  <p class="mut" style="margin-top:16px">Este app é um apoio ao autocuidado e não substitui acompanhamento com psicólogo ou psiquiatra. Seus registros ficam só neste navegador.</p>
+</section>
+</main>
+
+<button class="sos" id="sos">Preciso de ajuda</button>
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="Ajuda imediata">
+  <div class="sheet">
+    <h2>Um passo de cada vez</h2>
+    <p class="mut">Se você está em perigo ou pensando em se machucar, ligue agora. Há pessoas prontas para ouvir.</p>
+    <a class="btn" href="tel:188">Ligar para o CVV — 188</a>
+    <a class="btn" href="tel:192">Ligar para o SAMU — 192</a>
+    <p style="margin:14px 0 6px"><b>Para se acalmar agora (5-4-3-2-1):</b></p>
+    <p class="mut">Nomeie 5 coisas que você vê, 4 que você toca, 3 que você ouve, 2 que você cheira e 1 que você sente o gosto. Respire devagar entre cada uma.</p>
+    <p><button class="btn alt" id="sbr">Respirar comigo</button> <button class="btn alt" id="scl">Fechar</button></p>
+  </div>
+</div>
+
+<nav role="tablist" aria-label="Seções">
+  <button role="tab" data-t="hoje" aria-selected="true">Hoje</button>
+  <button role="tab" data-t="respirar" aria-selected="false">Respirar</button>
+  <button role="tab" data-t="sons" aria-selected="false">Sons</button>
+  <button role="tab" data-t="mandala" aria-selected="false">Mandala</button>
+  <button role="tab" data-t="diario" aria-selected="false">Diário</button>
+  <button role="tab" data-t="explorar" aria-selected="false">Explorar</button>
+  <button role="tab" data-t="ajuda" aria-selected="false">Apoio</button>
+</nav>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var S={moods:[],notes:[]};
+try{var r=localStorage.getItem('pausa');if(r)S=JSON.parse(r)}catch(e){}
+if(!S.moods)S.moods=[];if(!S.notes)S.notes=[];
+function save(){try{localStorage.setItem('pausa',JSON.stringify(S))}catch(e){}}
+function day(d){return d.toISOString().slice(0,10)}
+function today(){var d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return day(d)}
+
+// abas
+function show(t){
+  document.querySelectorAll('section').forEach(function(s){s.classList.toggle('on',s.id===t)});
+  document.querySelectorAll('nav button').forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===t)});
+  if(t!=='respirar')stop();
+  window.scrollTo(0,0);
+  try{history.replaceState(null,'','#'+t)}catch(e){}
+}
+document.querySelectorAll('nav button').forEach(function(b){b.onclick=function(){show(b.dataset.t)}});
+var h=(location.hash||'').slice(1);if(['hoje','respirar','sons','mandala','diario','explorar','ajuda'].indexOf(h)>-1)show(h);
+
+// humor
+var L=['Muito mal','Mal','Ok','Bem','Muito bem'],C=['--m1','--m2','--m3','--m4','--m5'],sel=0;
+var mw=$('moods');
+L.forEach(function(l,i){
+  var b=document.createElement('button');b.setAttribute('aria-pressed','false');
+  b.innerHTML='<i style="background:var('+C[i]+')"></i>'+l;
+  b.onclick=function(){sel=i+1;[].forEach.call(mw.children,function(x,j){x.setAttribute('aria-pressed',j===i)})};
+  mw.appendChild(b);
+});
+$('msave').onclick=function(){
+  if(!sel){$('mok').textContent='Escolha como você está.';return}
+  var t=today();S.moods=S.moods.filter(function(m){return m.d!==t});
+  S.moods.push({d:t,v:sel,n:$('mnote').value.trim()});save();
+  $('mnote').value='';$('mok').textContent='Humor salvo.';week();
+};
+function week(){
+  var w=$('week');w.innerHTML='';var d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
+  for(var i=6;i>=0;i--){
+    var x=new Date(d);x.setDate(d.getDate()-i);var k=day(x);
+    var m=S.moods.filter(function(m){return m.d===k})[0];
+    var c=document.createElement('div');
+    var b=document.createElement('b');
+    if(m){b.style.height=(m.v*18)+'%';b.style.background='var('+C[m.v-1]+')';b.title=L[m.v-1]}
+    c.appendChild(b);c.appendChild(document.createTextNode(['D','S','T','Q','Q','S','S'][x.getDay()]));
+    w.appendChild(c);
+  }
+}
+week();
+
+// respiração
+var timer=null,running=false;
+var orb=$('orb'),bgo=$('bgo');
+function phase(txt,scale,secs){orb.style.transitionDuration=secs+'s';orb.style.transform='scale('+scale+')';orb.textContent=txt}
+function cycle(){
+  if(!running)return;
+  phase('Inspire',1.7,4);
+  timer=setTimeout(function(){if(!running)return;phase('Segure',1.7,0.1);
+    timer=setTimeout(function(){if(!running)return;phase('Solte',1,6);
+      timer=setTimeout(cycle,6000)},4000)},4000);
+}
+function stop(){running=false;clearTimeout(timer);if(orb){orb.style.transitionDuration='1s';orb.style.transform='scale(1)';orb.textContent='Pronto?'}if(bgo)bgo.textContent='Começar'}
+bgo.onclick=function(){if(running){stop()}else{running=true;bgo.textContent='Parar';cycle()}};
+
+// diário
+var P=['O que pesou hoje, e o que ajudou, mesmo que um pouco?','Do que você precisa neste momento?','Que pensamento se repetiu hoje? O que você diria a um amigo que pensasse isso?','Cite três coisas pequenas que correram bem hoje.','O que você pode deixar para amanhã?'];
+var pi=0;function setP(){$('prompt').textContent=P[pi%P.length]}setP();
+$('dnew').onclick=function(){pi++;setP()};
+$('dsave').onclick=function(){
+  var t=$('dtext').value.trim();if(!t)return;
+  S.notes.unshift({d:new Date().toLocaleDateString('pt-BR',{day:'numeric',month:'long'}),q:P[pi%P.length],t:t});save();$('dtext').value='';list();
+};
+function list(){
+  var l=$('dlist');l.innerHTML='';
+  if(!S.notes.length){l.innerHTML='<p class="mut" style="margin:0">Suas entradas aparecem aqui. Escreva a primeira acima.</p>';return}
+  S.notes.slice(0,20).forEach(function(n){
+    var e=document.createElement('div');e.className='entry';
+    var s=document.createElement('small');s.textContent=n.d+' · '+n.q;
+    e.appendChild(s);e.appendChild(document.createTextNode(n.t));l.appendChild(e);
+  });
+}
+list();
+
+// socorro
+function ov(o){$('ov').classList.toggle('on',o)}
+$('sos').onclick=function(){ov(true)};$('scl').onclick=function(){ov(false)};
+$('ov').onclick=function(e){if(e.target===this)ov(false)};
+$('sbr').onclick=function(){ov(false);show('respirar')};
+
+// livros
+var B=[['Mindfulness: Atenção Plena','Mark Williams e Danny Penman'],['O Poder do Agora','Eckhart Tolle'],['Ansiedade: Como Enfrentar o Mal do Século','Augusto Cury'],['A Coragem de Ser Imperfeito','Brené Brown'],['Aonde Quer que Eu Vá, Lá Estou','Jon Kabat-Zinn']];
+B.forEach(function(b){
+  var d=document.createElement('div');d.className='bk';
+  var t=document.createElement('div');t.innerHTML='<b></b><br><span class="mut"></span>';
+  t.firstChild.textContent=b[0];t.lastChild.textContent=b[1];
+  var a=document.createElement('a');a.textContent='Buscar';a.target='_blank';a.rel='noopener noreferrer';
+  a.href='https://www.google.com/search?q='+encodeURIComponent('livro '+b[0]+' '+b[1]);
+  d.appendChild(t);d.appendChild(a);$('books').appendChild(d);
+});
+
+// explorar
+function item(p,t,d){var e=document.createElement('div');e.className='it';var b=document.createElement('b');b.textContent=t;var q=document.createElement('p');q.className='mut';q.textContent=d;e.appendChild(b);e.appendChild(q);$(p).appendChild(e)}
+[['Mímica das Emoções','Sorteie uma emoção ou situação do dia a dia e faça mímica para o grupo adivinhar. Trabalha a expressão emocional com muito humor.'],
+['Batata Quente da Gratidão','Passe um objeto ao som de música. Quando parar, quem estiver com ele diz algo bom do seu dia ou um elogio a um colega.'],
+['Detetive do Bem-Estar','Cada pessoa escreve um hábito secreto que a ajuda a relaxar. O grupo faz perguntas divertidas para descobrir de quem é.'],
+['Desafio do Pote da Alegria','Tire papéis de um pote com desafios leves e engraçados, como imitar um som relaxante, contar uma piada ou dar um abraço coletivo.']
+].forEach(function(x){item('games',x[0],x[1])});
+var M=[['Encontrar seu propósito e sentido para a vida',[['Vienna','Billy Joel'],['What Was I Made For?','Billie Eilish'],['The Climb','Miley Cyrus'],['Unwritten','Natasha Bedingfield'],['A Vida é Desafio',"Racionais MC's"]]],
+['Amor-próprio e autoestima',[['Scars to Your Beautiful','Alessia Cara'],['Born This Way','Lady Gaga'],['Love Myself','Hailee Steinfeld'],['Good as Hell','Lizzo'],['Beautiful','Christina Aguilera'],['i','Kendrick Lamar']]],
+['Saúde mental e equilíbrio emocional',[['After the Storm','Kali Uchis'],['Rainbow','Kesha'],['Keep Your Head Up','Andy Grammer'],['Three Little Birds','Bob Marley']]],
+['Evolução pessoal e motivação',[['A Sky Full of Stars','Coldplay'],['The Nights','Avicii'],['Shake It Out','Florence + The Machine'],['Firework','Katy Perry'],['Dog Days Are Over','Florence + The Machine'],['Eu Vou Seguir','Marina Elali']]],
+['Músicas brasileiras para refletir sobre a vida',[['Trem-Bala','Ana Vilela'],['Paciência','Lenine'],['Dias Melhores','Jota Quest'],['Mais Uma Vez','Renato Russo'],['Enquanto Houver Sol','Titãs'],['É Preciso Saber Viver','Titãs']]]];
+M.forEach(function(c){
+  var h=document.createElement('div');h.className='cat';h.textContent=c[0];$('music').appendChild(h);
+  c[1].forEach(function(s){
+    var r=document.createElement('div');r.className='sg';
+    var t=document.createElement('span');t.textContent=s[0]+' — '+s[1];
+    var a=document.createElement('a');a.textContent='Ouvir';a.target='_blank';a.rel='noopener noreferrer';
+    a.href='https://www.youtube.com/results?search_query='+encodeURIComponent(s[0]+' '+s[1]);
+    r.appendChild(t);r.appendChild(a);$('music').appendChild(r);
+  });
+});
+[['Divertida Mente (2015)','Mostra como as emoções influenciam nossos sentimentos e comportamentos.'],
+['As Vantagens de Ser Invisível (2012)','Aborda sofrimento emocional, traumas, bullying, amizade e a importância de buscar apoio.'],
+['Nise: O Coração da Loucura (2015)','Retrata o cuidado humanizado em saúde mental e o uso da arte como parte do tratamento.'],
+['O Mínimo para Viver (2017)','Aborda a anorexia e os desafios de quem enfrenta um transtorno alimentar, destacando a importância do tratamento. Pode ser um tema sensível: assista com cuidado.'],
+['Extraordinário (2017)','Fala sobre bullying, autoestima, empatia, aceitação e respeito às diferenças.'],
+['O Lado Bom da Vida (2012)','Aborda saúde mental, relações afetivas, recuperação e a importância do acompanhamento profissional.']
+].forEach(function(x){item('movies',x[0],x[1])});
+
+// sons (Web Audio)
+var AC=null,master=null,live={};
+function ac(){if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();master=AC.createGain();master.gain.value=.5;master.connect(AC.destination)}if(AC.state==='suspended')AC.resume();return AC}
+function noise(c,brown){var n=c.sampleRate*3,b=c.createBuffer(1,n,c.sampleRate),d=b.getChannelData(0),l=0;
+  for(var i=0;i<n;i++){var w=Math.random()*2-1;if(brown){l=(l+.02*w)/1.02;d[i]=l*3.5}else d[i]=w*.6}
+  var s=c.createBufferSource();s.buffer=b;s.loop=true;return s}
+function lfo(c,f,depth,target){var o=c.createOscillator(),g=c.createGain();o.frequency.value=f;g.gain.value=depth;o.connect(g);g.connect(target);o.start();return o}
+var SND={
+ 'Chuva':function(c,out){var s=noise(c,false),hp=c.createBiquadFilter(),lp=c.createBiquadFilter();hp.type='highpass';hp.frequency.value=700;lp.type='lowpass';lp.frequency.value=7000;s.connect(hp);hp.connect(lp);lp.connect(out);s.start();return [s]},
+ 'Oceano':function(c,out){var s=noise(c,true),lp=c.createBiquadFilter(),g=c.createGain();lp.type='lowpass';lp.frequency.value=800;g.gain.value=.5;s.connect(lp);lp.connect(g);g.connect(out);s.start();return [s,lfo(c,.09,.4,g.gain)]},
+ 'Vento':function(c,out){var s=noise(c,true),bp=c.createBiquadFilter();bp.type='bandpass';bp.frequency.value=450;bp.Q.value=.9;s.connect(bp);bp.connect(out);s.start();return [s,lfo(c,.06,250,bp.frequency)]},
+ 'Tigela tibetana':function(c,out){var r=[],g=c.createGain();g.gain.value=.12;g.connect(out);[174.6,261.6,392].forEach(function(f,i){var o=c.createOscillator();o.type='sine';o.frequency.value=f;var m=c.createGain();m.gain.value=.5;o.connect(m);m.connect(g);o.start();r.push(o);r.push(lfo(c,.15+i*.05,.25,m.gain))});return r}
+};
+Object.keys(SND).forEach(function(k){
+  var b=document.createElement('button');b.textContent=k;b.setAttribute('aria-pressed','false');
+  b.onclick=function(){
+    var c=ac();
+    if(live[k]){off(k);b.setAttribute('aria-pressed','false');return}
+    var out=c.createGain();out.gain.value=0;out.connect(master);
+    var nodes=SND[k](c,out);out.gain.linearRampToValueAtTime(.7,c.currentTime+2);
+    live[k]={out:out,nodes:nodes,b:b};b.setAttribute('aria-pressed','true');
+  };
+  $('snd').appendChild(b);
+});
+function off(k){var o=live[k];if(!o)return;var c=AC;o.out.gain.cancelScheduledValues(c.currentTime);o.out.gain.setTargetAtTime(0,c.currentTime,.3);
+  setTimeout(function(){o.nodes.forEach(function(n){try{n.stop()}catch(e){}})},1500);o.b.setAttribute('aria-pressed','false');delete live[k]}
+$('sstop').onclick=function(){Object.keys(live).forEach(off)};
+$('vol').oninput=function(){if(master)master.gain.value=this.value/100};
+
+// mandala
+var cv=$('cv'),g=cv.getContext('2d'),col='#4f6d9a',N=8,down=false,lp=null;
+g.lineCap='round';g.lineJoin='round';g.lineWidth=3;
+function pt(e){var r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*600/r.width-300,y:(e.clientY-r.top)*600/r.height-300}}
+function seg(a,b){g.strokeStyle=col;
+  for(var k=0;k<N;k++){var t=2*Math.PI*k/N,c=Math.cos(t),s=Math.sin(t);
+    for(var f=-1;f<=1;f+=2){
+      g.beginPath();
+      g.moveTo(300+f*a.x*c-a.y*s,300+f*a.x*s+a.y*c);
+      g.lineTo(300+f*b.x*c-b.y*s,300+f*b.x*s+b.y*c);
+      g.stroke();
+    }}}
+cv.onpointerdown=function(e){down=true;lp=pt(e);cv.setPointerCapture(e.pointerId);seg(lp,lp)};
+cv.onpointermove=function(e){if(!down)return;var p=pt(e);seg(lp,p);lp=p};
+cv.onpointerup=cv.onpointercancel=function(){down=false};
+['#e07a5f','#f2cc8f','#81b29a','#4f6d9a','#8a7fb8','#e9a8c4'].forEach(function(c,i){
+  var b=document.createElement('button');b.className='sw';b.style.background=c;b.setAttribute('aria-label','Cor '+(i+1));b.setAttribute('aria-pressed',i===3);
+  b.onclick=function(){col=c;[].forEach.call($('sw').children,function(x){x.setAttribute('aria-pressed',x===b)})};
+  $('sw').appendChild(b);
+});
+document.querySelectorAll('[data-n]').forEach(function(b){b.onclick=function(){N=+b.dataset.n}});
+$('mclr').onclick=function(){g.clearRect(0,0,600,600)};
+})();
+</script>
+</body>
+</html>
